@@ -1,0 +1,17 @@
+import rospy
+import cnc_utils import CNC
+ from geometry_msgs.msg import Pose
+
+class CNCSerial(object):
+   def __init__(self,port="/dev/USB0", br=9600):
+      self.CNC=CNC(port="/dev/ttyUSB0", br=115200,homing=False)
+      self.sub = rospy.Subscriber('/CNC/pose', Pose, self.pose_callback, queue_size=1)
+
+   def pose_callback(self, msg):
+   	  pose=msg.data
+   	  self.CNC.send_cmd("g0x%sy%sz-%s"%(pose.position.x,pose.position.y,pose.position.z))
+
+if __name__ == "__main__":
+    rospy.init_node('cnc_serial')
+    cnc_serial = CNCSerial()
+    rospy.spin()

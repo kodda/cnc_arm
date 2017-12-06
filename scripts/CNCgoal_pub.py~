@@ -1,0 +1,16 @@
+import rospy
+from geometry_msgs.msg import Pose
+from random import random
+
+
+rospy.init_node('CNCgoal_pub')
+pub=rospy.Publisher('/CNC/pose',Pose)
+rate=rospy.Rate(.2)
+
+while not rospy.is_shutdown():
+    goal=Pose()
+    goal.pose.position.x=random()
+    goal.pose.position.y=random()
+    goal.pose.position.z=random()
+    pub.publish(goal)
+    rate.sleep()
